@@ -2,93 +2,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calculadora de dosis de Estilsona</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7fcfe;
-      padding: 30px;
-      color: #333;
-    }
-    .contenedor {
-      max-width: 500px;
-      margin: auto;
-      background-color: #fff;
-      border: 2px solid #57c9e8;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    h1 {
-      color: #57c9e8;
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #57c9e8;
-      color: white;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      margin-top: 20px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .resultado {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #eafafd;
-      border-left: 5px solid #57c9e8;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Calculadora de Estilsona para niños</title>
+    <meta name="description" content="Calcula la dosis recomendada de Estilsona en función del peso del niño, según el prospecto oficial.">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+        label, input, p { font-size: 1.1em; }
+        input[type="number"] { width: 80px; }
+    </style>
 </head>
 <body>
-  <div class="contenedor">
     <h1>Calculadora de Estilsona</h1>
-    <label for="peso">Peso del niño (kg):</label>
-    <input type="number" id="peso" placeholder="Ej: 15" />
+    <p>Introduce el peso del niño para calcular la dosis diaria recomendada de Estilsona (según el prospecto).</p>
+    <label for="peso">Peso del niño (kg): </label>
+    <input type="number" id="peso" min="1" step="0.1">
+    <button onclick="calcularDosis()">Calcular</button>
 
-    <button onclick="calcularDosis()">Calcular dosis</button>
+    <div id="resultado" style="margin-top:20px;"></div>
 
-    <div class="resultado" id="resultado" style="display:none;"></div>
-  </div>
+    <script>
+        function calcularDosis() {
+            const peso = parseFloat(document.getElementById("peso").value);
+            if (isNaN(peso) || peso <= 0) {
+                document.getElementById("resultado").innerHTML = "<p>Por favor, introduce un peso válido.</p>";
+                return;
+            }
 
-  <script>
-    function calcularDosis() {
-      const peso = parseFloat(document.getElementById('peso').value);
-      const resultadoDiv = document.getElementById('resultado');
+            const gotasMin = (1 * peso).toFixed(1);
+            const gotasMax = (12 * peso).toFixed(1);
+            const mlMin = (0.015 * peso).toFixed(2);
+            const mlMax = (0.3 * peso).toFixed(2);
+            const mgMin = (0.1 * peso).toFixed(2);
+            const mgMax = (2 * peso).toFixed(2);
 
-      if (isNaN(peso) || peso <= 0) {
-        resultadoDiv.style.display = 'block';
-        resultadoDiv.innerText = 'Por favor, introduce un peso válido.';
-        return;
-      }
-
-      // Dosis habitual: 1 a 2 mg/kg/día, vamos a calcular un rango
-      // Estilsona 1mg/ml: cada ml contiene 1 mg de prednisolona
-      const dosisBaja = peso * 1;
-      const dosisAlta = peso * 2;
-
-      resultadoDiv.style.display = 'block';
-      resultadoDiv.innerHTML = `
-        Dosis orientativa total diaria: entre <strong>${dosisBaja.toFixed(1)} ml</strong> y <strong>${dosisAlta.toFixed(1)} ml</strong><br><br>
-        <em>Nota:</em> Esta dosis es orientativa y debe ser confirmada siempre por el pediatra.
-      `;
-    }
-  </script>
+            document.getElementById("resultado").innerHTML = `
+                <p><strong>Dosis total diaria estimada:</strong></p>
+                <ul>
+                    <li>${gotasMin} a ${gotasMax} gotas por día</li>
+                    <li>${mlMin} a ${mlMax} ml por día</li>
+                    <li>${mgMin} a ${mgMax} mg de prednisolona por día</li>
+                </ul>
+                <p><em>* Esta dosis puede dividirse en 1 a 4 tomas diarias, cada 12 o 6 horas.</em></p>
+                <p><strong>Consulta siempre con tu pediatra antes de administrar el medicamento.</strong></p>
+            `;
+        }
+    </script>
 </body>
 </html>
